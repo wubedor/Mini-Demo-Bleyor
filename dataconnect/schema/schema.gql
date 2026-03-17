@@ -1,0 +1,48 @@
+type User @table {
+  email: String!
+  passwordHash: String!
+  createdAt: Timestamp!
+  role: String! # Using String for enum 'client', 'provider'
+  firstName: String
+  lastName: String
+  phoneNumber: String
+  address: String
+}
+
+type Order @table {
+  orderDate: Date!
+  pickupDate: Date!
+  deliveryDate: Date!
+  status: String! # Using String for enum 'pending', 'processing', 'ready_for_delivery', 'completed', 'cancelled'
+  totalAmount: Float!
+  createdAt: Timestamp!
+  pickupTime: String
+  deliveryTime: String
+  specialInstructions: String
+  providerNotes: String
+  client: User!
+}
+
+type ServiceType @table {
+  name: String!
+  pricePerUnit: Float!
+  unitType: String! # Using String for enum 'pound', 'item'
+  description: String
+}
+
+type OrderItem @table {
+  quantity: Int!
+  subtotal: Float!
+  specificItemDescription: String
+  order: Order!
+  serviceType: ServiceType!
+}
+
+type Notification @table {
+  message: String!
+  type: String! # Using String for enum 'status_update', 'reminder', 'promo'
+  isRead: Boolean!
+  createdAt: Timestamp!
+  recipient: User!
+  order: Order
+}

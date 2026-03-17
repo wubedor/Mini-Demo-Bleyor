@@ -1,0 +1,92 @@
+.test-booking-creator {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  max-width: 600px;
+}
+
+.test-booking-creator h4 {
+  margin: 0 0 10px 0;
+  color: #856404;
+}
+
+.test-booking-creator p {
+  margin: 0 0 15px 0;
+  color: #856404;
+  font-size: 14px;
+}
+
+.user-status {
+  margin-bottom: 15px;
+}
+
+.user-status p {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+}
+
+.create-test-btn {
+  background: #ffc107;
+  color: #212529;
+  border: 1px solid #ffc107;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.create-test-btn:hover:not(:disabled) {
+  background: #e0a800;
+  border-color: #e0a800;
+}
+
+.create-test-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.message {
+  padding: 10px;
+  border-radius: 4px;
+  margin: 15px 0;
+  font-weight: bold;
+}
+
+.message.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.info {
+  background: #e9ecef;
+  padding: 15px;
+  border-radius: 4px;
+  margin-top: 15px;
+}
+
+.info h5 {
+  margin: 0 0 10px 0;
+  color: #495057;
+  font-size: 14px;
+}
+
+.info ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.info li {
+  margin: 5px 0;
+  color: #6c757d;
+  font-size: 13px;
+}

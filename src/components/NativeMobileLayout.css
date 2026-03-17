@@ -1,0 +1,358 @@
+/* 🎨 Native Mobile Layout - Platform-Perfect UI/UX */
+
+.native-mobile-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+  background: var(--background-color, #ffffff);
+  color: var(--text-primary, #000000);
+  transition: all 0.3s ease;
+}
+
+.native-content {
+  flex: 1;
+  width: 100%;
+  padding-bottom: var(--nav-height, 60px);
+  font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+}
+
+/* ===== iOS NATIVE NAVIGATION ===== */
+
+.ios .native-mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: var(--nav-height, 65px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 0.5px solid var(--border-color, #C6C6C8);
+  z-index: 1000;
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+}
+
+.ios .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition, 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94));
+  border-radius: 12px;
+  min-width: 60px;
+  min-height: 44px;
+  color: var(--text-tertiary, #8E8E93);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+.ios .nav-item:hover {
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--primary-color, #007AFF);
+  transform: translateY(-1px);
+}
+
+.ios .nav-item.active {
+  color: var(--primary-color, #007AFF);
+}
+
+.ios .nav-icon {
+  font-size: 20px;
+  margin-bottom: 2px;
+  line-height: 1;
+}
+
+.ios .nav-label {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* ===== ANDROID NATIVE NAVIGATION ===== */
+
+.android .native-mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: var(--nav-height, 70px);
+  background: var(--surface-color, #FFFFFF);
+  box-shadow: 0 -2px 8px var(--shadow-color, rgba(0, 0, 0, 0.12));
+  border-top: 1px solid var(--border-color, #E0E0E0);
+  z-index: 1000;
+  padding: 8px 0;
+}
+
+.android .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition, 0.3s cubic-bezier(0.4, 0.0, 0.2, 1));
+  border-radius: 50%;
+  margin: 0 8px;
+  min-width: 56px;
+  min-height: 56px;
+  color: var(--text-secondary, #757575);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.android .nav-item:hover {
+  background: rgba(25, 118, 210, 0.1);
+  color: var(--primary-color, #1976D2);
+  transform: scale(1.05);
+}
+
+.android .nav-item.active {
+  color: var(--primary-color, #1976D2);
+  background: rgba(25, 118, 210, 0.1);
+}
+
+.android .nav-icon {
+  font-size: 20px;
+  margin-bottom: 2px;
+  line-height: 1;
+}
+
+.android .nav-label {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* ===== RIPPLE EFFECT FOR ANDROID ===== */
+
+.android .nav-item::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.android .nav-item:active::after {
+  width: 100px;
+  height: 100px;
+}
+
+/* ===== SIZE-SPECIFIC ADJUSTMENTS ===== */
+
+/* iOS Small (iPhone SE) */
+.ios-small .nav-item {
+  min-width: 50px;
+  padding: 6px 8px;
+}
+
+.ios-small .nav-icon {
+  font-size: 16px;
+}
+
+.ios-small .nav-label {
+  font-size: 9px;
+}
+
+/* iOS Medium (iPhone 12/13/14) */
+.ios-medium .nav-item {
+  min-width: 60px;
+  padding: 8px 12px;
+}
+
+.ios-medium .nav-icon {
+  font-size: 20px;
+}
+
+.ios-medium .nav-label {
+  font-size: 10px;
+}
+
+/* iOS Large (iPhone Pro Max) */
+.ios-large .nav-item {
+  min-width: 70px;
+  padding: 10px 16px;
+}
+
+.ios-large .nav-icon {
+  font-size: 22px;
+}
+
+.ios-large .nav-label {
+  font-size: 11px;
+}
+
+/* Android Small */
+.android-small .nav-item {
+  min-width: 50px;
+  padding: 6px 8px;
+  margin: 0 6px;
+}
+
+.android-small .nav-icon {
+  font-size: 18px;
+}
+
+.android-small .nav-label {
+  font-size: 10px;
+}
+
+/* Android Medium */
+.android-medium .nav-item {
+  min-width: 56px;
+  padding: 8px 12px;
+  margin: 0 8px;
+}
+
+.android-medium .nav-icon {
+  font-size: 20px;
+}
+
+.android-medium .nav-label {
+  font-size: 11px;
+}
+
+/* Android Large */
+.android-large .nav-item {
+  min-width: 64px;
+  padding: 10px 16px;
+  margin: 0 10px;
+}
+
+.android-large .nav-icon {
+  font-size: 22px;
+}
+
+.android-large .nav-label {
+  font-size: 12px;
+}
+
+/* ===== ORIENTATION ADJUSTMENTS ===== */
+
+.landscape .native-mobile-nav {
+  height: calc(var(--nav-height, 65px) - 15px);
+  padding: 4px 0;
+}
+
+.landscape .nav-item {
+  min-height: 40px;
+  padding: 4px 8px;
+}
+
+.landscape .nav-icon {
+  font-size: 16px;
+  margin-bottom: 1px;
+}
+
+.landscape .nav-label {
+  font-size: 8px;
+}
+
+/* ===== DARK MODE ===== */
+
+@media (prefers-color-scheme: dark) {
+  .ios .native-mobile-nav {
+    background: rgba(28, 28, 30, 0.95);
+    border-top-color: var(--border-color, #38383A);
+  }
+  
+  .android .native-mobile-nav {
+    background: var(--surface-color, #1E1E1E);
+    border-top-color: var(--border-color, #333333);
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-item {
+    transition: none !important;
+  }
+  
+  .android .nav-item::after {
+    transition: none !important;
+  }
+}
+
+/* Focus styles */
+.nav-item:focus {
+  outline: 2px solid var(--primary-color, #007AFF);
+  outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .nav-item {
+    border: 1px solid currentColor;
+  }
+}
+
+/* ===== TABLET ADJUSTMENTS ===== */
+
+@media (min-width: 769px) {
+  .native-mobile-nav {
+    display: none;
+  }
+  
+  .native-content {
+    padding-bottom: 0;
+  }
+}
+
+/* ===== PLATFORM-SPECIFIC ANIMATIONS ===== */
+
+/* iOS Spring Animations */
+.ios .nav-item {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ios .nav-item:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* Android Material Animations */
+.android .nav-item {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.android .nav-item:hover {
+  transform: scale(1.1);
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+
+.nav-item {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.native-mobile-nav {
+  will-change: transform;
+  transform: translateZ(0);
+}

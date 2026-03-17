@@ -1,0 +1,52 @@
+.menu-icon {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+.menu-icon:hover {
+  background: rgba(102, 126, 234, 0.1);
+  transform: scale(1.05);
+}
+
+.menu-icon:active {
+  transform: scale(0.95);
+}
+
+.menu-icon svg {
+  transition: transform 0.3s ease;
+}
+
+.menu-icon.open svg {
+  transform: rotate(45deg);
+}
+
+.menu-icon.open .line1 {
+  transform: rotate(90deg) translateX(6px);
+}
+
+.menu-icon.open .line2 {
+  opacity: 0;
+}
+
+.menu-icon.open .line3 {
+  transform: rotate(-90deg) translateX(6px);
+}
+
+/* Mobile specific */
+@media (max-width: 768px) {
+  .menu-icon {
+    padding: 12px;
+  }
+  
+  .menu-icon:hover {
+    background: rgba(102, 126, 234, 0.15);
+  }
+}

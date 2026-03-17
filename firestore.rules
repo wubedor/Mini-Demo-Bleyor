@@ -1,0 +1,140 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // PRODUCTION SECURITY RULES - Maximum security against hacking attempts
+    
+    // Helper functions for security checks
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.admin == true;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isValidUserData() {
+      return isAuthenticated() && 
+        request.resource.data.keys().hasAll(['name', 'email']) &&
+        request.resource.data.name is string &&
+        request.resource.data.email is string &&
+        request.resource.data.name.size() > 0 &&
+        request.resource.data.name.size() <= 100 &&
+        request.resource.data.email.size() > 5 &&
+        request.resource.data.email.size() <= 254;
+    }
+    
+    function isValidBookingData() {
+      return isAuthenticated() && 
+        request.resource.data.keys().hasAll(['userId', 'service', 'date', 'address']) &&
+        request.resource.data.userId is string &&
+        request.resource.data.service is string &&
+        request.resource.data.date is string &&
+        request.resource.data.address is string &&
+        request.resource.data.userId.size() <= 128 &&
+        request.resource.data.service.size() <= 100 &&
+        request.resource.data.date.size() <= 50 &&
+        request.resource.data.address.size() <= 500;
+    }
+    
+    function isValidContactData() {
+      return request.resource.data.keys().hasAll(['name', 'email', 'message']) &&
+        request.resource.data.name is string &&
+        request.resource.data.email is string &&
+        request.resource.data.message is string &&
+        request.resource.data.name.size() > 0 &&
+        request.resource.data.name.size() <= 100 &&
+        request.resource.data.email.size() > 5 &&
+        request.resource.data.email.size() <= 254 &&
+        request.resource.data.message.size() >= 10 &&
+        request.resource.data.message.size() <= 1000;
+    }
+    
+    // Users collection - STRICT access control
+    match /users/{userId} {
+      allow read: if isAuthenticated() && isOwner(userId);
+      allow write: if isAuthenticated() && isOwner(userId) && isValidUserData();
+      allow create: if isAuthenticated() && isValidUserData();
+      allow update: if isAuthenticated() && isOwner(userId) && isValidUserData();
+      allow delete: if isAdmin();
+    }
+    
+    // Services collection - Read-only for public, write-only for admins
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if isAdmin() && 
+        request.resource.data.keys().hasAll(['name', 'description', 'price', 'duration']) &&
+        request.resource.data.name is string &&
+        request.resource.data.name.size() > 0 &&
+        request.resource.data.name.size() <= 100;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Bookings collection - STRICT security
+    match /bookings/{bookingId} {
+      allow read: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && isValidBookingData();
+      allow update: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isAdmin()) &&
+        isValidBookingData();
+      allow delete: if isAuthenticated() && 
+        (resource.data.userId == request.auth.uid || isAdmin());
+    }
+    
+    // Bookings list - Protected but necessary for app functionality
+    match /bookings {
+      allow list: if isAuthenticated();
+      allow get: if isAuthenticated();
+    }
+    
+    // Contact messages - Create for public, read for admins only
+    match /contactMessages/{messageId} {
+      allow create: if isValidContactData();
+      allow read: if isAdmin();
+      allow update: if false; // Contact messages are immutable
+      allow delete: if isAdmin();
+    }
+    
+    // Contact messages list - Admins only
+    match /contactMessages {
+      allow list: if isAdmin();
+      allow get: if isAdmin();
+    }
+    
+    // Admin notifications - Admins only
+    match /adminNotifications/{notificationId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin() && 
+        request.resource.data.keys().hasAll(['title', 'message', 'type', 'timestamp']) &&
+        request.resource.data.title is string &&
+        request.resource.data.message is string &&
+        request.resource.data.type in ['info', 'warning', 'error'];
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Admin notifications list - Admins only
+    match /adminNotifications {
+      allow list: if isAdmin();
+      allow get: if isAdmin();
+    }
+    
+    // Services list - Public read access
+    match /services {
+      allow list: if true;
+      allow get: if true;
+    }
+    
+    // Deny all other access attempts
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
