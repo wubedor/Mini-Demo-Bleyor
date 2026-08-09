@@ -22,3 +22,27 @@
   "keywords": [],
   "type": "commonjs"
 }
+
+{
+  "name": "bleyor",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cd my-app && npm start",
+    "build": "cd my-app && npm run build",
+    "test": "cd my-app && npm test"
+  },
+  "description": "root helper package.json for the bleyor workspace",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-plugin-react-compiler": "^1.0.0"
+  },
+  "dependencies": {
+    "firebase": "^12.12.1",
+    "react-router-dom": "^7.13.1"
+  },
+  "main": "index.js",
+  "keywords": [],
+  "type": "commonjs"
+}
