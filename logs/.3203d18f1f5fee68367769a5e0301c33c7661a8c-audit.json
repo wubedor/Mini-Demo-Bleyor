@@ -1,0 +1,25 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\x1\\OneDrive\\Desktop\\CSS - PRACTICE\\bleyor\\logs\\.3203d18f1f5fee68367769a5e0301c33c7661a8c-audit.json",
+    "files": [
+        {
+            "date": 1788612607002,
+            "name": "C:\\Users\\x1\\OneDrive\\Desktop\\CSS - PRACTICE\\bleyor\\logs\\application-2026-09-05.log",
+            "hash": "8ca098f4c9fa68668aa102216dd4abfd06b289a6efb7ab43d38e4b9980cd7c2f"
+        },
+        {
+            "date": 1788696523178,
+            "name": "C:\\Users\\x1\\OneDrive\\Desktop\\CSS - PRACTICE\\bleyor\\logs\\application-2026-09-06.log",
+            "hash": "aeb875d824c5cb38fb9adcaed1a5939e31a6e6f4b8a3439e06973764ef284c56"
+        },
+        {
+            "date": 1788925113887,
+            "name": "C:\\Users\\x1\\OneDrive\\Desktop\\CSS - PRACTICE\\bleyor\\logs\\application-2026-09-09.log",
+            "hash": "97349941837d41ea170f44651a0fea9a70eca661cbc1023e96599eed15eeb2e2"
+        }
+    ],
+    "hashType": "sha256"
+}

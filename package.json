@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "cd my-app && npm start",
+    "start": "npx concurrently \"node my-app/backend/server.js\" \"cd my-app && npm start\"",
     "install": "cd my-app && npm install",
     "build": "cd my-app && npm run build",
     "test": "cd my-app && npm test"
@@ -12,31 +12,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-plugin-react-compiler": "^1.0.0"
-  },
-  "dependencies": {
-    "firebase": "^12.12.1",
-    "react-router-dom": "^7.13.1"
-  },
-  "main": "index.js",
-  "keywords": [],
-  "type": "commonjs"
-}
-
-{
-  "name": "bleyor",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "start": "cd my-app && npm start",
-    "build": "cd my-app && npm run build",
-    "test": "cd my-app && npm test"
-  },
-  "description": "root helper package.json for the bleyor workspace",
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "babel-plugin-react-compiler": "^1.0.0"
+    "babel-plugin-react-compiler": "^1.0.0",
+    "concurrently": "^9.1.2"
   },
   "dependencies": {
     "firebase": "^12.12.1",
