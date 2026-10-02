@@ -1,0 +1,42 @@
+.simple-menu-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+}
+
+.menu-line {
+  width: 25px;
+  height: 3px;
+  background: #333;
+  margin: 2px 0;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.simple-menu-icon.open .menu-line:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.simple-menu-icon.open .menu-line:nth-child(2) {
+  opacity: 0;
+}
+
+.simple-menu-icon.open .menu-line:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.simple-menu-icon:hover .menu-line {
+  background: #007bff;
+}
+
+.simple-menu-icon:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}

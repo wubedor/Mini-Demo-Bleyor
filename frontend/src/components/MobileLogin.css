@@ -1,0 +1,365 @@
+/* Mobile Login Styles */
+.mobile-login {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.mobile-login-header {
+  flex: 0 0 auto;
+  padding: 40px 20px 30px;
+  text-align: center;
+  color: white;
+}
+
+.app-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-icon img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.mobile-login-header h1 {
+  margin: 0 0 10px 0;
+  font-size: 28px;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-login-header p {
+  margin: 0;
+  font-size: 16px;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+.mobile-login-form {
+  flex: 1 1 auto;
+  background: white;
+  border-radius: 30px 30px 0 0;
+  padding: 30px 20px 20px;
+  margin-top: -10px;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.error-message,
+.success-message {
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.error-message {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.success-message {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.google-auth-button {
+  width: 100%;
+  padding: 16px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.google-auth-button:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.google-auth-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 25px 0;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.divider span {
+  background: white;
+  padding: 0 16px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.mobile-input {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.mobile-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.mobile-input::placeholder {
+  color: #9ca3af;
+}
+
+.mobile-submit-button {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.mobile-submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.mobile-submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.auth-switch p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.switch-button {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 5px;
+}
+
+.switch-button:hover {
+  color: #5a67d8;
+}
+
+.mobile-login-footer {
+  flex: 0 0 auto;
+  padding: 20px;
+  background: white;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.feature-icon {
+  font-size: 24px;
+}
+
+.feature-text {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Mobile optimizations */
+@media (max-width: 480px) {
+  .mobile-login-header {
+    padding: 30px 15px 20px;
+  }
+  
+  .app-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 15px;
+  }
+  
+  .app-icon img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .mobile-login-header h1 {
+    font-size: 24px;
+  }
+  
+  .mobile-login-header p {
+    font-size: 14px;
+  }
+  
+  .mobile-login-form {
+    padding: 25px 15px 15px;
+  }
+  
+  .mobile-input,
+  .google-auth-button,
+  .mobile-submit-button {
+    padding: 14px;
+    font-size: 16px;
+  }
+  
+  .mobile-submit-button {
+    padding: 16px;
+    font-size: 16px;
+  }
+}
+
+/* iPhone notch and safe area support */
+@supports (padding: max(0px)) {
+  .mobile-login-header {
+    padding-top: max(40px, env(safe-area-inset-top));
+  }
+  
+  .mobile-login-footer {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .mobile-login-form {
+    background: #1f2937;
+    color: white;
+  }
+  
+  .mobile-input {
+    background: #374151;
+    border-color: #4b5563;
+    color: white;
+  }
+  
+  .mobile-input::placeholder {
+    color: #9ca3af;
+  }
+  
+  .google-auth-button {
+    background: #374151;
+    border-color: #4b5563;
+    color: white;
+  }
+  
+  .google-auth-button:hover:not(:disabled) {
+    background: #4b5563;
+  }
+  
+  .divider span {
+    background: #1f2937;
+  }
+  
+  .auth-switch p {
+    color: #9ca3af;
+  }
+  
+  .mobile-login-footer {
+    background: #1f2937;
+  }
+  
+  .feature-text {
+    color: #9ca3af;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .google-auth-button,
+  .mobile-submit-button,
+  .mobile-input {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .mobile-login-form {
+    border: 2px solid #000;
+  }
+  
+  .mobile-input,
+  .google-auth-button {
+    border: 2px solid #000;
+  }
+  
+  .mobile-submit-button {
+    border: 2px solid #000;
+  }
+}

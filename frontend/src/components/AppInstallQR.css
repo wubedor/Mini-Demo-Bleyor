@@ -1,0 +1,492 @@
+/* App Install QR Code Styles */
+.app-install-qr {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: white;
+}
+
+.qr-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.qr-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.qr-header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  color: #ffffff;
+}
+
+.qr-content {
+  display: grid;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.qr-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 350px;
+}
+
+.qr-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  color: #667eea;
+}
+
+.qr-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.qr-error {
+  text-align: center;
+  color: #dc3545;
+  padding: 20px;
+  background: #f8d7da;
+  border-radius: 10px;
+}
+
+.retry-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.retry-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.qr-code-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.qr-code-image {
+  width: 300px;
+  height: 300px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 5px solid white;
+}
+
+.qr-overlay {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  min-width: 150px;
+}
+
+.app-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #667eea;
+  margin-bottom: 5px;
+}
+
+.app-name {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.qr-info {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.app-url-section h3,
+.device-info h3 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.url-container {
+  display: flex;
+  gap: 10px;
+}
+
+.url-input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f8f9fa;
+  color: #333;
+  font-family: monospace;
+}
+
+.copy-button {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.copy-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.copy-button.copied {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.device-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.device-type {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.platform-info {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.download-qr-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.download-qr-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.instructions-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.install-instructions h3,
+.device-tips h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.steps-list {
+  list-style: none;
+  padding: 0;
+  counter-reset: step-counter;
+}
+
+.step-item {
+  counter-increment: step-counter;
+  margin-bottom: 15px;
+  padding-left: 35px;
+  position: relative;
+  color: #333;
+  line-height: 1.5;
+}
+
+.step-item::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 25px;
+  height: 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.tips-list {
+  list-style: none;
+  padding: 0;
+}
+
+.tip-item {
+  margin-bottom: 12px;
+  padding-left: 20px;
+  position: relative;
+  color: #333;
+  line-height: 1.5;
+}
+
+.tip-item::before {
+  content: "!";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 15px;
+  height: 15px;
+  background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.7rem;
+}
+
+.features-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.features-section h3 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #667eea;
+}
+
+.feature-text {
+  color: #333;
+  font-weight: 600;
+}
+
+.troubleshooting-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.troubleshooting-section h3 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.troubleshooting-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.trouble-item {
+  padding: 20px;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+  border-radius: 15px;
+  border-left: 4px solid #dc3545;
+}
+
+.trouble-item h4 {
+  color: #dc3545;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.trouble-item p {
+  color: #333;
+  line-height: 1.5;
+  margin: 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-install-qr {
+    padding: 10px;
+  }
+  
+  .qr-header {
+    padding: 30px 15px;
+  }
+  
+  .qr-header h1 {
+    font-size: 2rem;
+  }
+  
+  .qr-header p {
+    font-size: 1rem;
+  }
+  
+  .qr-section,
+  .instructions-section {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .qr-code-image {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  
+  .troubleshooting-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .qr-header {
+    padding: 20px 10px;
+  }
+  
+  .qr-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .qr-code-image {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .qr-overlay {
+    bottom: -15px;
+    min-width: 120px;
+    padding: 8px 15px;
+  }
+  
+  .app-icon {
+    font-size: 1rem;
+  }
+  
+  .app-name {
+    font-size: 0.8rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .app-install-qr {
+    background: #000;
+    color: #fff;
+  }
+  
+  .qr-header,
+  .qr-section,
+  .instructions-section,
+  .features-section,
+  .troubleshooting-section {
+    background: #fff;
+    color: #000;
+    border: 2px solid #000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .copy-button,
+  .retry-button,
+  .feature-item,
+  .spinner {
+    transition: none;
+    animation: none;
+  }
+  
+  .spinner {
+    border-top-color: #667eea;
+  }
+}

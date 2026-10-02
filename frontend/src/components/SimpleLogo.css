@@ -1,0 +1,84 @@
+.simple-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px; /* Set to 5px gap as requested */
+  margin-top: 2px; /* Move entire logo down by 2px */
+}
+
+.logo-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.simple-logo.small .logo-img {
+  height: 30px;
+}
+
+.simple-logo.large .logo-img {
+  height: 50px;
+}
+
+.simple-logo:hover .logo-img {
+  transform: scale(1.05);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  justify-content: flex-end; /* Move elements to bottom */
+  height: 100%; /* Take full height */
+  padding-bottom: 0;
+  padding-top: 12px; /* Increased from 10px to move text down by 2px */
+}
+
+.logo-samb {
+  font-weight: bold;
+  color: #007bff;
+  font-size: 14px; /* Reduced from 18px */
+  font-family: 'Poppins', sans-serif; /* Match Standard/Routine Cleaning font */
+  line-height: 1.1; /* Match Standard/Routine Cleaning line height */
+}
+
+.logo-laundry {
+  font-weight: normal;
+  color: #333;
+  font-size: 14px; /* Reduced from 18px */
+  font-family: 'Poppins', sans-serif; /* Match Standard/Routine Cleaning font */
+  line-height: 1.1; /* Match Standard/Routine Cleaning line height */
+  white-space: nowrap; /* Prevent unwanted wrapping */
+}
+
+.simple-logo.small .logo-samb {
+  font-size: 18px;
+}
+
+.simple-logo.small .logo-laundry {
+  font-size: 12px;
+}
+
+.simple-logo.large .logo-samb {
+  font-size: 32px;
+}
+
+.simple-logo.large .logo-laundry {
+  font-size: 20px;
+}
+
+.simple-logo:hover .logo-samb {
+  color: #0056b3;
+}
+
+.simple-logo:hover .logo-laundry {
+  color: #555;
+}

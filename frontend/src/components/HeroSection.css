@@ -1,0 +1,49 @@
+.hero-section {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    color: white;
+  }
+  
+  .hero-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .hero-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    color:rgb(255, 255, 255);
+    
+  }
+  
+  .hero-subtitle {
+    font-size: 24px;
+    margin-bottom: 40px;
+    font-family:'Times New Roman', Times, serif;
+    color: rgb(240, 241, 241) ;
+  }
+  
+  .hero-button {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .hero-button:hover {
+    background-color: #0056b3;
+  }
+  

@@ -1,0 +1,351 @@
+/* 📱 Universal Responsive Design for All Mobile Devices */
+
+/* ===== BASE MOBILE STYLES ===== */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* ===== DEVICE-SPECIFIC BREAKPOINTS ===== */
+
+/* 🍎 iPhone SE (320px - 375px) */
+@media screen and (max-width: 375px) {
+  .App {
+    font-size: 14px;
+  }
+  
+  .btn {
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+  
+  .form-input {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 12px;
+  }
+  
+  .service-card {
+    margin: 8px;
+    padding: 12px;
+  }
+  
+  .location-map-container {
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  .mobile-nav {
+    padding: 4px 0;
+  }
+  
+  .nav-btn {
+    min-width: 50px;
+    padding: 6px 4px;
+  }
+  
+  .nav-icon {
+    font-size: 16px;
+  }
+  
+  .nav-label {
+    font-size: 9px;
+  }
+}
+
+/* 🍎 iPhone 12/13/14 (390px) */
+@media screen and (min-width: 376px) and (max-width: 430px) {
+  .App {
+    font-size: 15px;
+  }
+  
+  .btn {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+  
+  .form-input {
+    font-size: 16px;
+    padding: 14px;
+  }
+  
+  .service-card {
+    margin: 12px;
+    padding: 16px;
+  }
+  
+  .nav-btn {
+    min-width: 60px;
+    padding: 8px 8px;
+  }
+  
+  .nav-icon {
+    font-size: 18px;
+  }
+  
+  .nav-label {
+    font-size: 10px;
+  }
+}
+
+/* 🍎 iPhone Pro Max (428px - 430px) */
+@media screen and (min-width: 431px) and (max-width: 460px) {
+  .App {
+    font-size: 16px;
+  }
+  
+  .btn {
+    padding: 16px 24px;
+    font-size: 16px;
+  }
+  
+  .service-card {
+    margin: 16px;
+    padding: 20px;
+  }
+  
+  .nav-btn {
+    min-width: 70px;
+    padding: 10px 12px;
+  }
+}
+
+/* 🤖 Android Small (360px - 411px) */
+@media screen and (min-width: 350px) and (max-width: 411px) {
+  .App {
+    font-size: 15px;
+  }
+  
+  .form-input {
+    font-size: 16px;
+    padding: 14px;
+    border-radius: 8px;
+  }
+  
+  .btn {
+    padding: 14px 20px;
+    border-radius: 8px;
+    min-height: 48px;
+  }
+  
+  .service-card {
+    margin: 12px;
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .mobile-footer {
+    padding: 12px 0;
+    height: 70px;
+  }
+}
+
+/* 🤖 Android Medium (412px - 480px) */
+@media screen and (min-width: 412px) and (max-width: 480px) {
+  .App {
+    font-size: 16px;
+  }
+  
+  .btn {
+    padding: 16px 24px;
+    font-size: 16px;
+    min-height: 48px;
+  }
+  
+  .form-input {
+    font-size: 16px;
+    padding: 16px;
+    border-radius: 8px;
+  }
+  
+  .service-card {
+    margin: 16px;
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  .location-map-container {
+    margin: 20px;
+    padding: 20px;
+  }
+}
+
+/* 🤖 Android Large/Tablet (481px - 768px) */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .App {
+    font-size: 17px;
+  }
+  
+  .btn {
+    padding: 18px 28px;
+    font-size: 17px;
+    min-height: 52px;
+  }
+  
+  .form-input {
+    font-size: 17px;
+    padding: 18px;
+    border-radius: 10px;
+  }
+  
+  .service-card {
+    margin: 20px;
+    padding: 24px;
+    border-radius: 16px;
+  }
+  
+  .mobile-footer {
+    display: none; /* Hide mobile nav on tablets */
+  }
+  
+  main {
+    padding-bottom: 0;
+  }
+}
+
+/* ===== UNIVERSAL MOBILE OPTIMIZATIONS ===== */
+
+/* Touch-friendly interactions */
+.btn, .nav-btn, .service-card, .form-input {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .form-input {
+    font-size: 16px !important; /* Prevent zoom */
+  }
+  
+  .mobile-footer {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Android Chrome specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+  .btn {
+    outline: none;
+  }
+  
+  .btn:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+  }
+}
+
+/* ===== SAFE AREA INSETS FOR NOTCHED PHONES ===== */
+.App {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.mobile-footer {
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+}
+
+/* ===== ORIENTATION HANDLING ===== */
+
+/* Landscape mode for all mobile devices */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .mobile-footer {
+    height: 50px;
+    padding: 4px 0;
+  }
+  
+  .nav-btn {
+    min-width: 50px;
+    padding: 4px 6px;
+  }
+  
+  .nav-icon {
+    font-size: 14px;
+  }
+  
+  .nav-label {
+    font-size: 8px;
+  }
+  
+  .service-card {
+    margin: 8px;
+    padding: 12px;
+  }
+  
+  .location-map-container {
+    margin: 10px;
+    padding: 10px;
+    max-height: 300px;
+  }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+  .App {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+  
+  .service-card {
+    background-color: #2d2d2d;
+    color: #ffffff;
+  }
+  
+  .form-input {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border-color: #4d4d4d;
+  }
+  
+  .mobile-footer {
+    background-color: #1a1a1a;
+    border-top-color: #4d4d4d;
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .btn {
+    border: 2px solid currentColor;
+  }
+  
+  .form-input {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+
+/* GPU acceleration for smooth scrolling */
+.mobile-nav, .service-card, .btn {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent pull-to-refresh on mobile */
+body {
+  overscroll-behavior-y: contain;
+}

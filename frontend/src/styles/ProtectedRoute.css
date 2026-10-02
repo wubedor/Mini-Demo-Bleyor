@@ -1,0 +1,22 @@
+/* ProtectedRoute Styles */
+.protected-route {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+}
+
+.protected-route-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.protected-route-message {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}

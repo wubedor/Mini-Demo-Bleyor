@@ -1,74 +1,202 @@
-<<<<<<< HEAD
-# Getting Started with Create React App
+# SAMB Laundry - React Frontend + Node.js Backend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack laundry services application with React frontend and Node.js backend.
+
+## Tech Stack
+
+### Frontend (React)
+- **React 18.3.1** - UI framework
+- **React Router DOM 7.13.1** - Client-side routing
+- **Axios 1.19.0** - HTTP client for API calls
+- **Socket.io Client 4.8.3** - Real-time communication
+- **Firebase 12.12.1** - Optional Firebase integration
+
+### Backend (Node.js)
+- **Express 4.18.2** - Web framework
+- **Node.js 18+** - Runtime environment
+- **CORS 2.8.5** - Cross-origin resource sharing
+- **Helmet 7.1.0** - Security headers
+- **Morgan 1.10.0** - HTTP request logger
+- **JWT 9.0.2** - Authentication tokens
+- **Mongoose 8.0.3** - MongoDB ODM
+- **Socket.io 4.6.0** - Real-time WebSocket server
+
+## Project Structure
+
+```
+bleyor/
+├── frontend/          # React application
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── config/        # Configuration files
+│   │   ├── context/       # React context providers
+│   │   ├── routing/       # Route components
+│   │   ├── services/      # API service functions
+│   │   ├── styles/        # CSS stylesheets
+│   │   ├── utils/         # Utility functions
+│   │   ├── App.js         # Main React component
+│   │   └── index.js       # Entry point
+│   ├── public/            # Static assets
+│   └── package.json       # Frontend dependencies
+├── backend/           # Node.js Express API
+│   ├── server.js          # Main server file
+│   ├── .env               # Environment variables
+│   ├── firebase.json      # Firebase configuration
+│   └── package.json       # Backend dependencies
+└── package.json       # Root scripts for both frontend and backend
+```
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+ 
+- npm 8+
+
+### Installation
+
+1. **Install all dependencies:**
+```bash
+npm run install:all
+```
+
+Or install separately:
+```bash
+npm run install:frontend  # Install frontend dependencies
+npm run install:backend   # Install backend dependencies
+```
+
+### Running the Application
+
+**Option 1: Run both frontend and backend together:**
+```bash
+npm start              # Start both in production mode
+npm run dev            # Start backend with nodemon + frontend
+```
+
+**Option 2: Run separately:**
+```bash
+# Terminal 1 - Backend
+cd backend
+node server.js        # or: npm run dev:backend
+
+# Terminal 2 - Frontend  
+cd frontend
+npm start             # React development server
+```
+
+### Development Servers
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:5000
+- **Health Check**: http://localhost:5000/health
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/login` - User login
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/logout` - User logout
+
+### Services
+- `GET /api/services` - Get all services
+- `POST /api/services` - Create service (admin)
+- `PUT /api/services/:id` - Update service (admin)
+- `DELETE /api/services/:id` - Delete service (admin)
+
+### Bookings
+- `GET /api/bookings` - Get user bookings
+- `POST /api/bookings` - Create booking
+- `PUT /api/bookings/:id` - Update booking
+- `DELETE /api/bookings/:id` - Cancel booking
+
+### Users
+- `GET /api/users/profile` - Get user profile
+- `PUT /api/users/profile` - Update user profile
 
 ## Available Scripts
 
-In the project directory, you can run:
+### Root Scripts
+- `npm start` - Start both frontend and backend
+- `npm run dev` - Start backend with nodemon + frontend
+- `npm run build` - Build frontend for production
+- `npm run install:all` - Install all dependencies
 
-### `npm start`
+### Frontend Scripts (cd frontend)
+- `npm start` - Start React development server
+- `npm run build` - Build for production
+- `npm test` - Run tests
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Backend Scripts (cd backend)
+- `npm start` - Start Node.js server
+- `npm run dev` - Start with nodemon (auto-restart)
+- `npm test` - Run backend tests
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+### Frontend
+- Modern React 18 with hooks
+- Client-side routing with React Router
+- API integration with Axios
+- Real-time updates with Socket.io
+- Responsive design
+- Authentication flow
+- Service booking system
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Backend
+- RESTful API with Express
+- JWT authentication
+- MongoDB database integration
+- Real-time WebSocket communication
+- Security with Helmet and CORS
+- Request logging with Morgan
+- Environment configuration with dotenv
 
-### `npm run build`
+## Environment Variables
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Backend (.env)
+```
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/samb-laundry
+JWT_SECRET=your-secret-key
+NODE_ENV=development
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Frontend (.env)
+```
+REACT_APP_API_URL=http://localhost:5000/api
+REACT_APP_SOCKET_URL=http://localhost:5000
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Production Deployment
 
-### `npm run eject`
+### Frontend Build
+```bash
+cd frontend
+npm run build
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Backend Production
+```bash
+cd backend
+NODE_ENV=production node server.js
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Troubleshooting
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**Frontend won't start:**
+- Check if port 3000 is available
+- Run `npm run install:frontend` to ensure dependencies are installed
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+**Backend won't start:**
+- Check if port 5000 is available
+- Ensure MongoDB is running if using database features
+- Run `npm run install:backend` to ensure dependencies are installed
 
-## Learn More
+**API connection errors:**
+- Verify backend is running on port 5000
+- Check CORS configuration
+- Ensure environment variables are set correctly
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## License
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-=======
-# Mini-Demo-Bleyor
->>>>>>> 82917358a48cb368579f66184d8fd48987a8409f
+MIT

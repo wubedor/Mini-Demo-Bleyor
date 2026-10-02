@@ -1,0 +1,444 @@
+/* 🎨 Native UI/UX Design for All Mobile Platforms */
+
+/* ===== iOS NATIVE DESIGN ===== */
+
+/* iOS Typography and Spacing */
+.ios {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  --primary-color: #007AFF;
+  --secondary-color: #5856D6;
+  --success-color: #34C759;
+  --warning-color: #FF9500;
+  --error-color: #FF3B30;
+  --background-color: #F2F2F7;
+  --surface-color: #FFFFFF;
+  --text-primary: #000000;
+  --text-secondary: #3C3C43;
+  --text-tertiary: #8E8E93;
+  --border-color: #C6C6C8;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* iOS Button Styles */
+.ios .btn {
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  border-radius: 12px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.ios .btn:hover {
+  background: #0051D5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.ios .btn:active {
+  transform: scale(0.98);
+  background: #0041B8;
+}
+
+.ios .btn-secondary {
+  background: var(--surface-color);
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+}
+
+.ios .btn-destructive {
+  background: var(--error-color);
+}
+
+/* iOS Card Styles */
+.ios .service-card,
+.ios .booking-card {
+  background: var(--surface-color);
+  border-radius: 16px;
+  box-shadow: 0 2px 10px var(--shadow-color);
+  border: none;
+  padding: 16px;
+  margin: 12px;
+}
+
+.ios .service-card:hover {
+  box-shadow: 0 4px 20px var(--shadow-color);
+  transform: translateY(-2px);
+}
+
+/* iOS Navigation Bar */
+.ios .universal-mobile-nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 0.5px solid var(--border-color);
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+}
+
+.ios .nav-item {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.ios .nav-item.active {
+  color: var(--primary-color);
+}
+
+.ios .nav-item:hover {
+  background: rgba(0, 122, 255, 0.1);
+  border-radius: 12px;
+}
+
+/* iOS Form Inputs */
+.ios .form-input,
+.ios .form-textarea {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  font-family: inherit;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.ios .form-input:focus,
+.ios .form-textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+  outline: none;
+}
+
+/* iOS Status Bar Integration */
+.ios.standalone {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* ===== ANDROID MATERIAL DESIGN ===== */
+
+/* Android Typography and Spacing */
+.android {
+  font-family: 'Roboto', 'Noto Sans', sans-serif;
+  --primary-color: #1976D2;
+  --secondary-color: #7B1FA2;
+  --success-color: #388E3C;
+  --warning-color: #F57C00;
+  --error-color: #D32F2F;
+  --background-color: #FAFAFA;
+  --surface-color: #FFFFFF;
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  --text-tertiary: #BDBDBD;
+  --border-color: #E0E0E0;
+  --shadow-color: rgba(0, 0, 0, 0.12);
+}
+
+/* Android Button Styles */
+.android .btn {
+  font-family: inherit;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.25px;
+  border-radius: 4px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.android .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(-100%);
+  transition: transform 0.3s;
+}
+
+.android .btn:hover::before {
+  transform: translateX(0);
+}
+
+.android .btn:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.android .btn:active {
+  transform: scale(0.98);
+}
+
+.android .btn-secondary {
+  background: transparent;
+  color: var(--primary-color);
+  box-shadow: none;
+  border: 1px solid var(--primary-color);
+}
+
+.android .btn-destructive {
+  background: var(--error-color);
+}
+
+/* Android Card Styles */
+.android .service-card,
+.android .booking-card {
+  background: var(--surface-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  margin: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.android .service-card:hover {
+  box-shadow: 0 4px 8px var(--shadow-color);
+  transform: translateY(-1px);
+}
+
+/* Android Navigation Bar */
+.android .universal-mobile-nav {
+  background: var(--surface-color);
+  box-shadow: 0 -2px 8px var(--shadow-color);
+  border-top: 1px solid var(--border-color);
+  padding: 8px 0;
+}
+
+.android .nav-item {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  border-radius: 50%;
+  margin: 0 8px;
+}
+
+.android .nav-item.active {
+  color: var(--primary-color);
+  background: rgba(25, 118, 210, 0.1);
+}
+
+.android .nav-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Android Form Inputs */
+.android .form-input,
+.android .form-textarea {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 16px;
+  font-family: inherit;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.android .form-input:focus,
+.android .form-textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  outline: none;
+}
+
+/* Android Ripple Effect */
+.android .btn,
+.android .nav-item,
+.android .service-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.android .btn::after,
+.android .nav-item::after,
+.android .service-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.android .btn:active::after,
+.android .nav-item:active::after,
+.android .service-card:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* ===== DEVICE-SPECIFIC OPTIMIZATIONS ===== */
+
+/* iPhone SE - Compact iOS */
+.ios-small {
+  --nav-height: 60px;
+  --card-padding: 12px;
+  --button-padding: 12px 16px;
+  --font-scale: 0.9;
+}
+
+.ios-small .btn {
+  padding: var(--button-padding);
+  font-size: calc(14px * var(--font-scale));
+}
+
+.ios-small .service-card {
+  padding: var(--card-padding);
+  margin: 8px;
+}
+
+/* iPhone 12/13/14 - Standard iOS */
+.ios-medium {
+  --nav-height: 65px;
+  --card-padding: 16px;
+  --button-padding: 14px 20px;
+  --font-scale: 1;
+}
+
+/* iPhone Pro Max - Large iOS */
+.ios-large {
+  --nav-height: 70px;
+  --card-padding: 20px;
+  --button-padding: 16px 24px;
+  --font-scale: 1.1;
+}
+
+/* Android Small - Compact Android */
+.android-small {
+  --nav-height: 65px;
+  --card-padding: 16px;
+  --button-padding: 14px 20px;
+  --font-scale: 0.95;
+}
+
+/* Android Medium - Standard Android */
+.android-medium {
+  --nav-height: 70px;
+  --card-padding: 16px;
+  --button-padding: 16px 24px;
+  --font-scale: 1;
+}
+
+/* Android Large - Tablet Android */
+.android-large {
+  --nav-height: 75px;
+  --card-padding: 20px;
+  --button-padding: 18px 28px;
+  --font-scale: 1.05;
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+
+@media (prefers-color-scheme: dark) {
+  .ios {
+    --background-color: #000000;
+    --surface-color: #1C1C1E;
+    --text-primary: #FFFFFF;
+    --text-secondary: #EBEBF5;
+    --text-tertiary: #8E8E93;
+    --border-color: #38383A;
+    --shadow-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .ios .universal-mobile-nav {
+    background: rgba(28, 28, 30, 0.95);
+  }
+  
+  .android {
+    --background-color: #121212;
+    --surface-color: #1E1E1E;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B3B3B3;
+    --text-tertiary: #666666;
+    --border-color: #333333;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ===== MOTION AND ANIMATIONS ===== */
+
+/* iOS Motion */
+.ios {
+  --transition-fast: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-standard: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-slow: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Android Motion */
+.android {
+  --transition-fast: 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+  --transition-standard: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .ios,
+  .android {
+    --transition-fast: 0s;
+    --transition-standard: 0s;
+    --transition-slow: 0s;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .ios .btn {
+    border: 2px solid currentColor;
+  }
+  
+  .android .btn {
+    border: 2px solid currentColor;
+  }
+  
+  .ios .form-input,
+  .android .form-input {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Focus Styles */
+.ios .btn:focus,
+.ios .nav-item:focus,
+.ios .form-input:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.android .btn:focus,
+.android .nav-item:focus,
+.android .form-input:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* ===== PLATFORM DETECTION CLASSES ===== */
+
+/* iOS Detection */
+@supports (-webkit-touch-callout: none) {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  }
+}
+
+/* Android Detection */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+  body:not(.ios) {
+    font-family: 'Roboto', 'Noto Sans', sans-serif;
+  }
+}

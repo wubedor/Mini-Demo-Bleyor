@@ -1,0 +1,38 @@
+.location-map-container {
+  padding: 80px 20px;
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.location-map-container h3 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.location-map {
+  width: 100%;
+  height: 450px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.map-error {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.map-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666;
+}

@@ -1,0 +1,370 @@
+.startup-qr-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.startup-qr-modal {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.6s ease;
+  color: white;
+  text-align: center;
+}
+
+@keyframes slideUp {
+  from { 
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.qr-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.qr-header p {
+  margin: 0 0 30px 0;
+  font-size: 16px;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.qr-code-container {
+  margin-bottom: 30px;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.qr-code-container.loading {
+  opacity: 0.7;
+}
+
+.qr-code-container.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.qr-code-wrapper {
+  position: relative;
+  display: inline-block;
+  animation: qrPulse 2s ease-in-out infinite;
+}
+
+@keyframes qrPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.qr-code-image {
+  width: 300px;
+  height: 300px;
+  border-radius: 15px;
+  background: white;
+  padding: 10px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.qr-glow {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
+  border-radius: 20px;
+  animation: glow 2s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes glow {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+.qr-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.qr-loading p {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.qr-instructions {
+  margin-bottom: 30px;
+}
+
+.qr-instructions h4 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  color: white;
+}
+
+.steps {
+  display: grid;
+  gap: 15px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.step-number {
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 14px;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+.qr-actions {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.qr-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qr-btn.primary {
+  background: white;
+  color: #667eea;
+}
+
+.qr-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.qr-btn.secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.qr-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.qr-btn.close {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.qr-btn.close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.app-info {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.app-details {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.app-icon {
+  font-size: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  width: 70px;
+  height: 70px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.app-text h4 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+}
+
+.app-text p {
+  margin: 0 0 5px 0;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+.app-text small {
+  opacity: 0.7;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.qr-footer {
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+.qr-footer strong {
+  color: #ffd700;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .startup-qr-modal {
+    padding: 30px 20px;
+    margin: 20px;
+    width: calc(100% - 40px);
+  }
+  
+  .qr-header h2 {
+    font-size: 24px;
+  }
+  
+  .qr-header p {
+    font-size: 14px;
+  }
+  
+  .qr-code-container {
+    min-height: 280px;
+  }
+  
+  .qr-code-image {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .qr-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .qr-btn {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+  }
+  
+  .app-details {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .app-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .startup-qr-modal {
+    padding: 20px 15px;
+    margin: 10px;
+    width: calc(100% - 20px);
+  }
+  
+  .qr-header h2 {
+    font-size: 20px;
+  }
+  
+  .qr-code-image {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .step {
+    padding: 12px;
+  }
+  
+  .step-number {
+    width: 25px;
+    height: 25px;
+    font-size: 12px;
+  }
+  
+  .step-text {
+    font-size: 13px;
+  }
+}

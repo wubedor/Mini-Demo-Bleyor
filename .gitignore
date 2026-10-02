@@ -1,5 +1,25 @@
-node_modules
+# Dependencies
+node_modules/
 
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# MongoDB local files
 .mongodb/
 
-node_modules
+# Logs
+logs/
+*.log
+
+# Build output
+build/
+dist/
+
+# Vercel
+.vercel/
+
+# OS files
+.DS_Store
+Thumbs.db
