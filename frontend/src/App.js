@@ -224,11 +224,7 @@ export default function App() {
                     <Route path="/firebase-status" element={<FirebaseStatus />} />
                     <Route path="/app" element={<QRCodePage />} />
                     <Route path="/install" element={<AppInstallQR />} />
-                    <Route path="/book" element={
-                      <ProtectedRoute>
-                        <BookingPage />
-                      </ProtectedRoute>
-                    } />
+                    <Route path="/book" element={<BookingPage />} />
                     <Route path="/my-bookings" element={
                       <ProtectedRoute>
                         <MyBookings />

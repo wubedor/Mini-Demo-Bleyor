@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { db } from "./firebase";
-import { collection, addDoc, doc, getDoc } from "firebase/firestore";
+import axios from 'axios';
 import { useAuth } from "../context/AuthContext";
-// import LocationPicker from "./LocationPicker";
 import "./BookingForm.css";
-// import "./LocationPicker.css";
 
 export default function BookingForm({ selectedService }) {
   const { user } = useAuth();
@@ -12,41 +9,23 @@ export default function BookingForm({ selectedService }) {
     name: "",
     phone: "",
     address: "",
-    service: "",
+    service: selectedService || "",
     date: "",
     notes: "",
-    deliveryOption: "both", // New field: "pickup", "delivery", or "both"
-    pickupLocation: null, // New field for pickup coordinates
-    deliveryLocation: null, // New field for delivery coordinates
-    cleaningOptions: {
-      sweepingMopping: false,
-      dusting: false,
-      washrooms: false,
-      corridors: false,
-      wasteDisposal: false,
-      scrubbingFloors: false,
-      wallsTilesWashing: false,
-      windowsGlassCleaning: false,
-      furnitureCleaning: false,
-      washroomDescaling: false,
-      removingPaintMarks: false,
-      highIntensityDebrisRemoval: false,
-      venuePreparationRestoration: false,
-      washingDryingIroning: false
-    }
+    deliveryOption: "both", // "pickup", "delivery", or "both"
+    pickupLocation: null,
+    deliveryLocation: null
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [minDate, setMinDate] = useState("");
-  const [showPickupPicker, setShowPickupPicker] = useState(false);
-  const [showDeliveryPicker, setShowDeliveryPicker] = useState(false);
 
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
         setError(null);
-      }, 5000); // Disappears after 5 seconds
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [error]);
@@ -55,489 +34,213 @@ export default function BookingForm({ selectedService }) {
     if (success) {
       const timer = setTimeout(() => {
         setSuccess(false);
-      }, 5000); // Disappears after 5 seconds
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [success]);
 
   useEffect(() => {
+    const today = new Date();
+    today.setDate(today.getDate() + 1); // Minimum date is tomorrow
+    setMinDate(today.toISOString().split('T')[0]);
+  }, []);
+
+  // Update service when selectedService prop changes
+  useEffect(() => {
     if (selectedService) {
-      setForm((prevForm) => ({
-        ...prevForm,
-        service: selectedService,
-      }));
+      setForm(prev => ({ ...prev, service: selectedService }));
     }
   }, [selectedService]);
 
-  useEffect(() => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-    setMinDate(`${year}-${month}-${day}`);
-
-    const fetchUserData = async () => {
-      if (user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setForm((prevForm) => ({
-            ...prevForm,
-            name: userData.name || prevForm.name,
-            phone: userData.phonenumber || prevForm.phone,
-            address: userData.address || prevForm.address,
-          }));
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (name.startsWith('cleaningOptions.')) {
+      const optionName = name.split('.')[1];
+      setForm(prev => ({
+        ...prev,
+        cleaningOptions: {
+          ...prev.cleaningOptions,
+          [optionName]: checked
         }
-      }
-    };
-    
-    fetchUserData();
-  }, [user]);
-
-  const handleChange = (key) => (e) => {
-    let value = e.target.value;
-
-    if (key === "phone") {
-      // Remove non-digit characters and limit to 10 digits
-      const input = value.replace(/\D/g, "").substring(0, 10);
-      const size = input.length;
-
-      // Apply formatting as (XXX) XXX-XXXX
-      if (size <= 3) {
-        value = input;
-      } else if (size <= 6) {
-        value = `(${input.substring(0, 3)}) ${input.substring(3)}`;
-      } else {
-        value = `(${input.substring(0, 3)}) ${input.substring(3, 6)}-${input.substring(6, 10)}`;
-      }
+      }));
+    } else {
+      setForm(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }));
     }
-
-    setForm({ ...form, [key]: value });
   };
 
-  const handlePickupLocationSelect = (location) => {
-    setForm(prevForm => ({
-      ...prevForm,
-      pickupLocation: location
-    }));
-    setShowPickupPicker(false);
-  };
-
-  const handleDeliveryLocationSelect = (location) => {
-    setForm(prevForm => ({
-      ...prevForm,
-      deliveryLocation: location,
-      address: location.address // Update address field with selected location
-    }));
-    setShowDeliveryPicker(false);
-  };
-
-  const handleCleaningOptionChange = (option) => (e) => {
-    setForm(prevForm => ({
-      ...prevForm,
-      cleaningOptions: {
-        ...prevForm.cleaningOptions,
-        [option]: e.target.checked
-      }
-    }));
-  };
-
-  const submit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validate required fields based on delivery option
-    const needsAddress = form.deliveryOption === 'delivery' || form.deliveryOption === 'both';
-    const needsPickupLocation = form.deliveryOption === 'pickup' || form.deliveryOption === 'both';
-    
-    if (!form.name || !form.phone || !form.service || !form.date) {
-      setError("Please fill out all required fields.");
-      return;
-    }
-    
-    if (needsAddress && !form.address && !form.deliveryLocation) {
-      setError("Please select a delivery location.");
-      return;
-    }
-    
-    if (needsPickupLocation && !form.pickupLocation) {
-      setError("Please select a pickup location.");
-      return;
-    }
-
-    // Validate date is not in the past
-    if (form.date < minDate) {
-      setError("Booking date cannot be in the past.");
-      return;
-    }
-
-    // Validate phone number after removing formatting
-    const phoneDigits = form.phone.replace(/\D/g, "");
-    if (phoneDigits.length !== 10) {
-      setError("Please enter a valid 10-digit phone number.");
-      return;
-    }
-
     setLoading(true);
     setError(null);
     setSuccess(false);
 
+    // Validation
+    if (!form.name || !form.phone || !form.address || !form.service || !form.date) {
+      setError("Please fill in all required fields");
+      setLoading(false);
+      return;
+    }
+
     try {
-      await addDoc(collection(db, "bookings"), {
-        ...form,
-        userId: user ? user.uid : null,
-        createdAt: new Date(),
-        status: "Pending",
+      const token = localStorage.getItem('accessToken');
+      const bookingData = {
+        customer: {
+          name: form.name,
+          phone: form.phone,
+          email: user?.email || ''
+        },
+        service: form.service,
+        address: form.address,
+        date: form.date,
+        notes: form.notes,
+        deliveryOption: form.deliveryOption,
+        pickupLocation: form.pickupLocation,
+        deliveryLocation: form.deliveryLocation,
+        userId: user?.id || 'guest',
+        status: 'pending'
+      };
+
+      const response = await axios.post('http://localhost:5000/api/bookings', bookingData, {
+        headers: { Authorization: `Bearer ${token}` }
       });
-      setSuccess(true);
-      // Reset booking-specific fields. This preserves pre-filled user data
-      // for logged-in users and is a convenience for guests who might want
-      // to book again.
-      setForm((prevForm) => ({
-        ...prevForm,
-        date: "",
-        notes: "",
-        service: "", // Clear service field for a new booking
-        // Keep deliveryOption, name, phone, address for convenience
-        cleaningOptions: {
-          sweepingMopping: false,
-          dusting: false,
-          washrooms: false,
-          corridors: false,
-          wasteDisposal: false,
-          scrubbingFloors: false,
-          wallsTilesWashing: false,
-          windowsGlassCleaning: false,
-          furnitureCleaning: false,
-          washroomDescaling: false,
-          removingPaintMarks: false,
-          highIntensityDebrisRemoval: false,
-          venuePreparationRestoration: false,
-          washingDryingIroning: false
-        }
-      }));
+
+      if (response.data.success) {
+        setSuccess("Booking created successfully! We will contact you to confirm.");
+        // Reset form
+        setForm({
+          name: "",
+          phone: "",
+          address: "",
+          service: selectedService || "",
+          date: "",
+          notes: "",
+          deliveryOption: "both",
+          pickupLocation: null,
+          deliveryLocation: null
+        });
+      } else {
+        setError("Failed to create booking. Please try again.");
+      }
     } catch (err) {
-      setError("Error submitting booking: " + err.message);
+      console.error("Booking error:", err);
+      setError("Failed to create booking. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form id="booking-form" className="booking-form" onSubmit={submit}>
+    <div className="booking-form-container">
+      <h2>Book Your Service</h2>
       {error && <div className="error-message">{error}</div>}
-      {success && (
-        <div className="success-message">
-          Your booking has been submitted successfully!
-        </div>
-      )}
+      {success && <div className="success-message">{success}</div>}
 
-      {/* Delivery Options */}
-      <div className="delivery-options">
-        <label className="delivery-options-label">Service Type:</label>
-        <div className="delivery-option-buttons">
-          <button
-            type="button"
-            className={`delivery-option-button ${form.deliveryOption === 'pickup' ? 'active' : ''}`}
-            onClick={() => setForm({ ...form, deliveryOption: 'pickup' })}
-          >
-            🚚 Pickup Only
-          </button>
-          <button
-            type="button"
-            className={`delivery-option-button ${form.deliveryOption === 'delivery' ? 'active' : ''}`}
-            onClick={() => setForm({ ...form, deliveryOption: 'delivery' })}
-          >
-            🏠 Delivery Only
-          </button>
-          <button
-            type="button"
-            className={`delivery-option-button ${form.deliveryOption === 'both' ? 'active' : ''}`}
-            onClick={() => setForm({ ...form, deliveryOption: 'both' })}
-          >
-            🔄 Pickup & Delivery
-          </button>
-        </div>
-      </div>
-
-      <input
-        type="text"
-        placeholder="Name"
-        value={form.name}
-        onChange={handleChange("name")}
-        className="input"
-        required
-      />
-      <input
-        type="tel"
-        placeholder="Phone"
-        value={form.phone}
-        onChange={handleChange("phone")}
-        className="input"
-        required
-      />
-      
-      {/* Address field - only show if delivery is involved */}
-      {(form.deliveryOption === 'delivery' || form.deliveryOption === 'both') && (
-        <div className="location-input-group">
-          <div className="location-input-container">
+      <form onSubmit={handleSubmit} className="booking-form">
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="name">Full Name *</label>
             <input
               type="text"
-              placeholder="Delivery Address"
-              value={form.deliveryLocation ? form.deliveryLocation.address : form.address}
-              onChange={handleChange("address")}
-              className="input"
-              readOnly={!!form.deliveryLocation}
+              id="name"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+              placeholder="John Doe"
             />
-            <button
-              type="button"
-              className="location-picker-button"
-              onClick={() => setShowDeliveryPicker(true)}
-            >
-              📍 Select on Map
-            </button>
           </div>
-          {form.deliveryLocation && (
-            <div className="selected-location-info">
-              <small>✅ Location selected: {form.deliveryLocation.address}</small>
-            </div>
-          )}
-        </div>
-      )}
-      {form.deliveryOption === 'pickup' && (
-        <div className="location-input-group">
-          <div className="location-input-container">
+
+          <div className="form-group">
+            <label htmlFor="phone">Phone Number *</label>
             <input
-              type="text"
-              placeholder="Pickup Location"
-              value={form.pickupLocation ? form.pickupLocation.address : ''}
-              className="input"
-              readOnly
+              type="tel"
+              id="phone"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              required
+              placeholder="+233 20 123 4567"
             />
-            <button
-              type="button"
-              className="location-picker-button"
-              onClick={() => setShowPickupPicker(true)}
-            >
-              📍 Select on Map
-            </button>
-          </div>
-          {form.pickupLocation && (
-            <div className="selected-location-info">
-              <small>✅ Pickup location selected: {form.pickupLocation.address}</small>
-            </div>
-          )}
-        </div>
-      )}
-      
-      <input
-        type="text"
-        placeholder="Service"
-        value={form.service}
-        onChange={handleChange("service")}
-        className="input"
-        required
-      />
-      
-      {/* Debug: Show current service value */}
-      <div style={{ fontSize: '12px', color: '#666', marginBottom: '10px' }}>
-        Debug: Current service = "{form.service}"
-      </div>
-      
-      {/* Cleaning Options - only show for Standard/Routine Cleaning */}
-      {form.service && form.service.includes("Standard") && (
-        <div className="cleaning-options-section">
-          <h4>Select Cleaning Services:</h4>
-          <div className="cleaning-options-grid">
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.sweepingMopping}
-                onChange={handleCleaningOptionChange('sweepingMopping')}
-              />
-              <span>Sweeping & mopping</span>
-            </label>
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.dusting}
-                onChange={handleCleaningOptionChange('dusting')}
-              />
-              <span>Dusting</span>
-            </label>
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.washrooms}
-                onChange={handleCleaningOptionChange('washrooms')}
-              />
-              <span>Washrooms cleaning</span>
-            </label>
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.corridors}
-                onChange={handleCleaningOptionChange('corridors')}
-              />
-              <span>Corridors/staircase</span>
-            </label>
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.wasteDisposal}
-                onChange={handleCleaningOptionChange('wasteDisposal')}
-              />
-              <span>Light waste disposal</span>
-            </label>
           </div>
         </div>
-      )}
-      
-      {/* Deep Cleaning Options - only show for Deep Cleaning */}
-      {form.service && form.service.includes("Deep") && (
-        <div className="cleaning-options-section">
-          <h4>Select Deep Cleaning Services:</h4>
-          <div className="cleaning-options-grid">
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.scrubbingFloors}
-                onChange={handleCleaningOptionChange('scrubbingFloors')}
-              />
-              <span>Scrubbing floors</span>
-            </label>
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.wallsTilesWashing}
-                onChange={handleCleaningOptionChange('wallsTilesWashing')}
-              />
-              <span>Walls/tiles washing</span>
-            </label>
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.windowsGlassCleaning}
-                onChange={handleCleaningOptionChange('windowsGlassCleaning')}
-              />
-              <span>Windows/glass cleaning</span>
-            </label>
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.furnitureCleaning}
-                onChange={handleCleaningOptionChange('furnitureCleaning')}
-              />
-              <span>Furniture cleaning</span>
-            </label>
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.washroomDescaling}
-                onChange={handleCleaningOptionChange('washroomDescaling')}
-              />
-              <span>Washroom descaling</span>
-            </label>
-          </div>
+
+        <div className="form-group">
+          <label htmlFor="address">Address *</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+            required
+            placeholder="Your address"
+          />
         </div>
-      )}
-      
-      {/* Post-Construction Cleaning Options - only show for Post-Construction Cleaning */}
-      {form.service && form.service.includes("Post-Construction") && (
-        <div className="cleaning-options-section">
-          <h4>Select Post-Construction Cleaning Services:</h4>
-          <div className="cleaning-options-grid">
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.removingPaintMarks}
-                onChange={handleCleaningOptionChange('removingPaintMarks')}
-              />
-              <span>Removing paint marks, cement dust</span>
-            </label>
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.highIntensityDebrisRemoval}
-                onChange={handleCleaningOptionChange('highIntensityDebrisRemoval')}
-              />
-              <span>High-intensity debris removal</span>
-            </label>
-          </div>
+
+        <div className="form-group">
+          <label htmlFor="service">Service Type *</label>
+          <select
+            id="service"
+            name="service"
+            value={form.service}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select a service</option>
+            <option value="Standard Laundry">Standard Laundry</option>
+            <option value="Dry Cleaning">Dry Cleaning</option>
+            <option value="Deep Cleaning">Deep Cleaning</option>
+            <option value="Post-Construction Cleaning">Post-Construction Cleaning</option>
+            <option value="Pre & Post Event Cleaning">Pre & Post Event Cleaning</option>
+          </select>
         </div>
-      )}
-      
-      {/* Pre & Post Event Cleaning Options - only show for Pre & Post Event Cleaning */}
-      {form.service && (form.service.includes("Event") || form.service.includes("Pre & Post")) && (
-        <div className="cleaning-options-section">
-          <h4>Select Event Cleaning Services:</h4>
-          <div className="cleaning-options-grid">
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.venuePreparationRestoration}
-                onChange={handleCleaningOptionChange('venuePreparationRestoration')}
-              />
-              <span>Venue preparation and restoration</span>
-            </label>
-          </div>
+
+        <div className="form-group">
+          <label htmlFor="date">Preferred Date *</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={form.date}
+            onChange={handleChange}
+            required
+            min={minDate}
+          />
         </div>
-      )}
-      
-      {/* Laundry Services Options - only show for Laundry Services */}
-      {form.service && form.service.includes("Laundry") && (
-        <div className="cleaning-options-section">
-          <h4>Select Laundry Services:</h4>
-          <div className="cleaning-options-grid">
-            <label className="cleaning-option">
-              <input
-                type="checkbox"
-                checked={form.cleaningOptions.washingDryingIroning}
-                onChange={handleCleaningOptionChange('washingDryingIroning')}
-              />
-              <span>Washing, drying, ironing</span>
-            </label>
-          </div>
+
+        <div className="form-group">
+          <label htmlFor="deliveryOption">Delivery Option</label>
+          <select
+            id="deliveryOption"
+            name="deliveryOption"
+            value={form.deliveryOption}
+            onChange={handleChange}
+          >
+            <option value="pickup">Pickup Only</option>
+            <option value="delivery">Delivery Only</option>
+            <option value="both">Pickup and Delivery</option>
+          </select>
         </div>
-      )}
-      
-      <input
-        type="date"
-        placeholder="Date"
-        value={form.date}
-        onChange={handleChange("date")}
-        className="input"
-        min={minDate}
-        required
-      />
-      <textarea
-        placeholder="Notes"
-        value={form.notes}
-        onChange={handleChange("notes")}
-        className="textarea"
-      />
-      <button
-        type="submit"
-        className="button booking-form-button"
-        disabled={loading}
-      >
-        {loading && <div className="spinner"></div>}
-        {loading ? "Submitting..." : "Submit Booking"}
-      </button>
-      
-      {/* Location Pickers - Temporarily disabled */}
-      {/* <LocationPicker
-        isOpen={showPickupPicker}
-        onClose={() => setShowPickupPicker(false)}
-        onLocationSelect={handlePickupLocationSelect}
-        initialLocation={form.pickupLocation}
-      />
-      
-      <LocationPicker
-        isOpen={showDeliveryPicker}
-        onClose={() => setShowDeliveryPicker(false)}
-        onLocationSelect={handleDeliveryLocationSelect}
-        initialLocation={form.deliveryLocation}
-      /> */}
-    </form>
+
+        <div className="form-group">
+          <label htmlFor="notes">Additional Notes</label>
+          <textarea
+            id="notes"
+            name="notes"
+            value={form.notes}
+            onChange={handleChange}
+            placeholder="Any special instructions..."
+            rows={4}
+          />
+        </div>
+
+        <button type="submit" className="submit-btn" disabled={loading}>
+          {loading ? "Submitting..." : "Submit Booking"}
+        </button>
+      </form>
+    </div>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { db } from '../config/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import axios from 'axios';
 import './ContactPage.css';
 
 export default function ContactPage() {
@@ -13,16 +12,6 @@ export default function ContactPage() {
   });
   const [status, setStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Check if Firebase is available
-  if (!db) {
-    return (
-      <div style={{ padding: '40px', textAlign: 'center' }}>
-        <h2>Contact Form Unavailable</h2>
-        <p>Firebase services are not configured. Please contact us via email or phone.</p>
-      </div>
-    );
-  }
 
   const sanitizeInput = (input) => {
     return input
@@ -102,44 +91,33 @@ export default function ContactPage() {
     }
 
     try {
-      // Sanitize data before sending to database
-      const sanitizedData = {
-        name: sanitizeInput(formData.name),
-        email: sanitizeInput(formData.email),
-        phone: sanitizeInput(formData.phone),
-        subject: sanitizeInput(formData.subject),
-        message: sanitizeInput(formData.message),
-        timestamp: serverTimestamp(),
-        userAgent: navigator.userAgent.substring(0, 200), // Limit user agent length
-        ipAddress: null // We'll let Firebase handle this securely
-      };
-
-      // Add to Firestore with security rules
-      await addDoc(collection(db, 'contactMessages'), sanitizedData);
+      // Send to backend API
+      const response = await axios.post('http://localhost:5000/api/contact', formData);
       
-      // Update rate limiting
-      try {
-        localStorage.setItem('lastContactSubmission', Date.now().toString());
-      } catch (error) {
-        console.warn('Unable to access localStorage:', error);
+      if (response.data.success) {
+        // Update rate limiting
+        try {
+          localStorage.setItem('lastContactSubmission', Date.now().toString());
+        } catch (error) {
+          console.warn('Unable to access localStorage:', error);
+        }
+        
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+        
+        setStatus('Message sent successfully! We will get back to you soon.');
+        
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+          setStatus('');
+        }, 5000);
       }
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
-      });
-      
-      setStatus('Message sent successfully! We will get back to you soon.');
-      
-      // Clear success message after 5 seconds
-      setTimeout(() => {
-        setStatus('');
-      }, 5000);
-      
     } catch (error) {
       console.error('Contact form error:', error);
       setStatus('Failed to send message. Please try again later.');
@@ -260,7 +238,11 @@ export default function ContactPage() {
             </div>
             <div className="contact-method">
               <h3>Location</h3>
-              <p>Visit our laundry service center</p>
+              <p>Greater Accra, Ghana</p>
+            </div>
+            <div className="contact-method">
+              <h3>Hours</h3>
+              <p>Monday - Saturday, 8:00 AM - 6:00 PM</p>
             </div>
           </div>
         </div>
