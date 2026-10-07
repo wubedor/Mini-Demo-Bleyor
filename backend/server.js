@@ -275,9 +275,11 @@ app.post('/api/services', async (req, res) => {
 });
 
 // Users endpoint
-app.get('/api/users/profile', async (req, res) => {
+app.get('/api/users', async (req, res) => {
   try {
-    const users = await User.find();
+    const { role } = req.query;
+    const filter = role ? { role } : {};
+    const users = await User.find(filter).select('-password');
     res.json({
       success: true,
       data: { users }
@@ -294,19 +296,106 @@ app.get('/api/users/profile', async (req, res) => {
   }
 });
 
+// Update user endpoint
+app.put('/api/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { firstName, lastName, phone, role, department, address, city, region, isActive } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { firstName, lastName, phone, role, department, address, city, region, isActive },
+      { new: true }
+    ).select('-password');
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          message: 'User not found',
+          code: 'USER_NOT_FOUND'
+        }
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'User updated successfully',
+      data: { user: updatedUser }
+    });
+  } catch (error) {
+    console.error('Update user error:', error);
+    res.status(500).json({
+      success: false,
+      error: {
+        message: 'Failed to update user',
+        code: 'UPDATE_USER_ERROR'
+      }
+    });
+  }
+});
+
+// Delete user endpoint
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          message: 'User not found',
+          code: 'USER_NOT_FOUND'
+        }
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'User deleted successfully'
+    });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    res.status(500).json({
+      success: false,
+      error: {
+        message: 'Failed to delete user',
+        code: 'DELETE_USER_ERROR'
+      }
+    });
+  }
+});
+
 // Update user profile endpoint
 app.put('/api/users/profile', async (req, res) => {
   try {
-    const { name, phone, address, city, region } = req.body;
+    const { firstName, lastName, phone, address, city, region } = req.body;
     const token = req.headers.authorization?.replace('Bearer ', '');
 
-    // For demo, update first user (in production, decode token to get user ID)
-    const nameParts = name.split(' ');
+    console.log('Profile update request:', { firstName, lastName, phone, address, city, region });
+
+    // Get user email from token (in production, decode JWT properly)
+    // For now, use the email from localStorage if available
+    const userData = JSON.parse(req.headers['x-user-data'] || '{}');
+    const email = userData.email;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'User email required',
+          code: 'MISSING_EMAIL'
+        }
+      });
+    }
+
     const updatedUser = await User.findOneAndUpdate(
-      {},
+      { email },
       {
-        firstName: nameParts[0],
-        lastName: nameParts.slice(1).join(' ') || '',
+        firstName,
+        lastName,
         phone,
         address,
         city,
@@ -314,6 +403,18 @@ app.put('/api/users/profile', async (req, res) => {
       },
       { new: true }
     );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          message: 'User not found',
+          code: 'USER_NOT_FOUND'
+        }
+      });
+    }
+
+    console.log('Profile updated successfully:', updatedUser);
 
     res.json({
       success: true,
@@ -325,7 +426,7 @@ app.put('/api/users/profile', async (req, res) => {
     res.status(500).json({
       success: false,
       error: {
-        message: 'Failed to update profile',
+        message: 'Failed to update profile: ' + error.message,
         code: 'UPDATE_PROFILE_ERROR'
       }
     });
@@ -359,9 +460,7 @@ app.delete('/api/users/profile', async (req, res) => {
 // Bookings endpoint
 app.get('/api/bookings', async (req, res) => {
   try {
-    const bookings = await Booking.find()
-      .populate('customer', 'firstName lastName email')
-      .populate('service', 'name description');
+    const bookings = await Booking.find().sort({ createdAt: -1 });
     res.json({
       success: true,
       data: { bookings }
@@ -381,8 +480,68 @@ app.get('/api/bookings', async (req, res) => {
 // Create booking endpoint
 app.post('/api/bookings', async (req, res) => {
   try {
-    const booking = new Booking(req.body);
+    console.log('Received booking request:', req.body);
+    
+    const { customer, service, address, date, notes, deliveryOption, pickupLocation, deliveryLocation, userId, status } = req.body;
+    
+    // Validate required fields
+    if (!customer || !customer.name || !customer.phone) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'Customer name and phone are required',
+          code: 'MISSING_CUSTOMER_INFO'
+        }
+      });
+    }
+    
+    if (!service) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'Service is required',
+          code: 'MISSING_SERVICE'
+        }
+      });
+    }
+    
+    if (!address) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'Address is required',
+          code: 'MISSING_ADDRESS'
+        }
+      });
+    }
+    
+    if (!date) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'Date is required',
+          code: 'MISSING_DATE'
+        }
+      });
+    }
+
+    const booking = new Booking({
+      customer,
+      service,
+      serviceName: service,
+      address,
+      date: new Date(date),
+      notes,
+      deliveryOption: deliveryOption || 'both',
+      pickupLocation,
+      deliveryLocation,
+      userId,
+      status: status || 'pending'
+    });
+    
     await booking.save();
+    console.log('Booking created successfully:', booking);
+    
     res.status(201).json({
       success: true,
       message: 'Booking created successfully',
@@ -390,10 +549,11 @@ app.post('/api/bookings', async (req, res) => {
     });
   } catch (error) {
     console.error('Create booking error:', error);
+    console.error('Error details:', error.message);
     res.status(500).json({
       success: false,
       error: {
-        message: 'Failed to create booking',
+        message: 'Failed to create booking: ' + error.message,
         code: 'CREATE_BOOKING_ERROR'
       }
     });

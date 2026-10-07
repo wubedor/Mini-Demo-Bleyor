@@ -1,33 +1,20 @@
 import { useNavigate, Link, NavLink } from 'react-router-dom';
 import { useState } from 'react';
-import { signOut } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
-import { auth } from '../config/firebase';
 import MenuIcon from './MenuIcon';
 import './Header.css';
 import Logo from './Logo';
 
 export default function Header() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleLogout = async () => {
-    // Clear local storage
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userData');
+  const handleLogout = () => {
+    // Call the logout function from AuthContext
+    logout();
     
-    // Sign out from Firebase if available
-    if (auth) {
-      try {
-        await signOut(auth);
-      } catch (error) {
-        console.warn('Firebase signOut failed:', error);
-      }
-    }
-    
+    // Navigate to home page
     navigate('/');
     setIsMenuOpen(false);
   };
@@ -72,9 +59,14 @@ export default function Header() {
               <>
                 <li><NavLink to="/my-bookings" onClick={handleLinkClick}>My Bookings</NavLink></li>
                 <li><NavLink to="/profile" onClick={handleLinkClick}>Profile</NavLink></li>
+                {(user.role === 'admin' || user.role === 'super_admin') && (
+                  <li><NavLink to="/employees" onClick={handleLinkClick}>Employees</NavLink></li>
+                )}
                 <li><button onClick={handleLogout} className="logout-button">Logout</button></li>
               </>
-            ) : null}
+            ) : (
+              <li><Link to="/login" onClick={handleLinkClick}>Login</Link></li>
+            )}
             <li><Link to="/book" className="button" onClick={handleLinkClick}>Book Now</Link></li>
           </ul>
         </nav>

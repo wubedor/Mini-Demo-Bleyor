@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../config/firebase';
-import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from './LoadingSpinner';
 import './ProfilePage.css';
@@ -9,9 +8,12 @@ import './ProfilePage.css';
 export default function ProfilePage() {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     phone: '',
-    address: ''
+    address: '',
+    city: '',
+    region: ''
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -20,26 +22,32 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (user) {
-        setLoading(true);
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
+      try {
+        const token = localStorage.getItem('accessToken');
+        const userData = localStorage.getItem('userData');
+        
+        if (userData) {
+          const parsedData = JSON.parse(userData);
           setFormData({
-            name: userData.name || '',
-            phone: userData.phonenumber || '',
-            address: userData.address || ''
+            firstName: parsedData.firstName || '',
+            lastName: parsedData.lastName || '',
+            phone: parsedData.phone || '',
+            address: parsedData.address || '',
+            city: parsedData.city || '',
+            region: parsedData.region || ''
           });
         }
+        
         setLoading(false);
-      } else {
-        navigate('/login');
+      } catch (err) {
+        console.error('Error fetching user data:', err);
+        setError('Failed to load profile data');
+        setLoading(false);
       }
     };
 
     fetchUserData();
-  }, [user, navigate]);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -47,21 +55,30 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user) return;
-
     setError('');
     setSuccess('');
     setLoading(true);
 
     try {
-      const userDocRef = doc(db, 'users', user.uid);
-      await updateDoc(userDocRef, {
-        name: formData.name,
-        phonenumber: formData.phone,
-        address: formData.address
+      const token = localStorage.getItem('accessToken');
+      const userData = localStorage.getItem('userData');
+      
+      const response = await axios.put('http://localhost:5000/api/users/profile', formData, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'x-user-data': userData || '{}'
+        }
       });
-      setSuccess('Profile updated successfully!');
+
+      if (response.data.success) {
+        // Update localStorage
+        const parsedUserData = JSON.parse(userData || '{}');
+        localStorage.setItem('userData', JSON.stringify({ ...parsedUserData, ...formData }));
+        
+        setSuccess('Profile updated successfully!');
+      }
     } catch (err) {
+      console.error('Profile update error:', err);
       setError('Failed to update profile. Please try again.');
     } finally {
       setLoading(false);
@@ -69,17 +86,19 @@ export default function ProfilePage() {
   };
 
   const handleDeleteAccount = async () => {
-    if (!user) return;
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
       setLoading(true);
       try {
-        // Delete user data from Firestore
-        await deleteDoc(doc(db, 'users', user.uid));
-        // Delete user from Authentication
-        await user.delete();
+        const token = localStorage.getItem('accessToken');
+        await axios.delete('http://localhost:5000/api/users/profile', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        // Clear localStorage
+        localStorage.clear();
         navigate('/');
       } catch (err) {
-        setError('Failed to delete account. You may need to re-login recently to perform this action.');
+        setError('Failed to delete account. Please try again.');
         setLoading(false);
       }
     }
@@ -96,12 +115,24 @@ export default function ProfilePage() {
         {error && <div className="profile-error">{error}</div>}
         {success && <div className="profile-success">{success}</div>}
         <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Full Name</label>
-          <input id="name" type="text" name="name" value={formData.name} onChange={handleChange} required />
+          <label htmlFor="firstName">First Name</label>
+          <input id="firstName" type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
+          
+          <label htmlFor="lastName">Last Name</label>
+          <input id="lastName" type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
+          
           <label htmlFor="phone">Phone Number</label>
           <input id="phone" type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+          
           <label htmlFor="address">Address</label>
           <input id="address" type="text" name="address" value={formData.address} onChange={handleChange} required />
+          
+          <label htmlFor="city">City</label>
+          <input id="city" type="text" name="city" value={formData.city} onChange={handleChange} />
+          
+          <label htmlFor="region">Region</label>
+          <input id="region" type="text" name="region" value={formData.region} onChange={handleChange} />
+          
           <button type="submit" className="profile-button" disabled={loading}>
             {loading ? 'Updating...' : 'Update Profile'}
           </button>

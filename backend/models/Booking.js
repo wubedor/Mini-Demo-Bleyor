@@ -1,91 +1,61 @@
 const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({
+  // Simple booking fields for frontend form
   customer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    name: String,
+    phone: String,
+    email: String
   },
-  service: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Service',
-    required: true
-  },
-  serviceName: {
+  service: String,
+  serviceName: String,
+  address: String,
+  date: Date,
+  notes: String,
+  deliveryOption: {
     type: String,
-    required: true
+    enum: ['pickup', 'delivery', 'both'],
+    default: 'both'
   },
-  bookingType: {
-    type: String,
-    enum: ['pickup', 'dropoff', 'both'],
-    default: 'pickup'
+  pickupLocation: {
+    lat: Number,
+    lng: Number,
+    address: String
+  },
+  deliveryLocation: {
+    lat: Number,
+    lng: Number,
+    address: String
+  },
+  userId: String,
+  
+  // Additional fields for future use
+  serviceId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Service'
   },
   quantity: {
     type: Number,
-    required: true,
-    min: 1,
     default: 1
   },
-  basePrice: {
-    type: Number,
-    required: true
-  },
-  totalPrice: {
-    type: Number,
-    required: true
-  },
-  scheduledDate: {
-    type: Date,
-    required: true
-  },
-  scheduledTime: {
-    type: String,
-    required: true
-  },
+  basePrice: Number,
+  totalPrice: Number,
+  scheduledTime: String,
   estimatedDuration: {
     type: Number,
     default: 60
   },
-  estimatedCompletion: {
-    type: Date
-  },
-  estimatedDelivery: {
-    type: Date
-  },
+  estimatedCompletion: Date,
+  estimatedDelivery: Date,
   paymentMethod: {
     type: String,
     enum: ['cash', 'card', 'mobile_money'],
     default: 'cash'
   },
-  pickupAddress: {
-    street: String,
-    city: String,
-    region: String,
-    country: String,
-    postalCode: String,
-    coordinates: {
-      lat: Number,
-      lng: Number
-    }
-  },
-  deliveryAddress: {
-    street: String,
-    city: String,
-    region: String,
-    country: String,
-    postalCode: String,
-    coordinates: {
-      lat: Number,
-      lng: Number
-    }
-  },
   selectedOptions: [{
     name: String,
     value: String
   }],
-  specialInstructions: {
-    type: String
-  },
   itemsList: [{
     name: String,
     quantity: Number,

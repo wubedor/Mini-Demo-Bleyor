@@ -29,6 +29,7 @@ import AccountSetup from './components/AccountSetup';
 import AccountDashboard from './components/AccountDashboard';
 import BookingPage from './components/BookingPage';
 import AdminDashboard from './components/AdminDashboard';
+import EmployeePage from './components/EmployeePage';
 import QRCodePage from './components/QRCodePage';
 import PasswordReset from './components/PasswordReset';
 import PhoneAuth from './components/PhoneAuth';
@@ -219,6 +220,7 @@ export default function App() {
                     <Route path="/firebase-test" element={<FirebaseTest />} />
                     <Route path="/account-dashboard" element={<ProtectedRoute><AccountDashboard /></ProtectedRoute>} />
                     <Route path="/admin-dashboard" element={<BackendAdminRoute><AdminDashboard /></BackendAdminRoute>} />
+                    <Route path="/employees" element={<BackendAdminRoute><EmployeePage /></BackendAdminRoute>} />
                     <Route path="/admin/*" element={<BackendAdminRoute><AdminRoutes /></BackendAdminRoute>} />
                     <Route path="/user-data-protection" element={<ProtectedRoute><UserDataProtection /></ProtectedRoute>} />
                     <Route path="/firebase-status" element={<FirebaseStatus />} />

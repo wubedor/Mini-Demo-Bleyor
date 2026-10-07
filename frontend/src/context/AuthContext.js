@@ -30,10 +30,26 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
+  const logout = () => {
+    // Clear all authentication data from localStorage
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userData');
+    
+    // Reset state
+    setUser(null);
+    setIsAdmin(false);
+    
+    // Reload page to ensure clean state
+    window.location.reload();
+  };
+
   const value = {
     user,
     loading,
     isAdmin,
+    logout,
   };
 
   return (

@@ -41,8 +41,12 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['customer', 'admin', 'super_admin'],
+    enum: ['customer', 'employee', 'admin', 'super_admin'],
     default: 'customer'
+  },
+  department: {
+    type: String,
+    trim: true
   },
   preferredService: {
     type: String,

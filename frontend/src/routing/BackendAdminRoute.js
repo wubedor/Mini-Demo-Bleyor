@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import axios from 'axios';
-import { BACKEND_CONFIG } from '../config/backendConfig';
 
 export default function BackendAdminRoute({ children }) {
   const [loading, setLoading] = useState(true);
@@ -9,12 +7,12 @@ export default function BackendAdminRoute({ children }) {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    const checkAdminAccess = async () => {
+    const checkAdminAccess = () => {
       setLoading(true);
       setError('');
 
       try {
-        // Check if user has backend authentication token
+        // Check if user has authentication token
         const token = localStorage.getItem('accessToken');
         
         if (!token) {
@@ -23,30 +21,28 @@ export default function BackendAdminRoute({ children }) {
           return;
         }
 
-        // Verify token and check admin role
-        const response = await axios.get(`${BACKEND_CONFIG.apiURL}/users/profile`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        // Check user role from localStorage
+        const userRole = localStorage.getItem('userRole');
+        const userData = localStorage.getItem('userData');
+        
+        if (!userData) {
+          setError('User data not found');
+          setLoading(false);
+          return;
+        }
 
-        const user = response.data.data.user;
+        const parsedUser = JSON.parse(userData);
 
         // Check if user has admin role
-        if (user.role !== 'admin' && user.role !== 'super_admin') {
+        if (userRole !== 'admin' && userRole !== 'super_admin') {
           setError('Admin access required');
           setLoading(false);
           return;
         }
 
         // Check if user account is active
-        if (!user.isActive) {
+        if (parsedUser.isActive === false) {
           setError('Account is not active');
-          setLoading(false);
-          return;
-        }
-
-        // Check if user account is blocked
-        if (user.isBlocked) {
-          setError('Account is blocked');
           setLoading(false);
           return;
         }
@@ -55,15 +51,7 @@ export default function BackendAdminRoute({ children }) {
         setLoading(false);
       } catch (error) {
         console.error('Error checking admin access:', error);
-        
-        if (error.response?.status === 401) {
-          setError('Authentication required - Please login again');
-        } else if (error.response?.status === 403) {
-          setError('Admin access required');
-        } else {
-          setError('Error verifying admin access');
-        }
-        
+        setError('Error verifying admin access');
         setLoading(false);
       }
     };

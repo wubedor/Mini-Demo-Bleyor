@@ -4,7 +4,6 @@ import axios from 'axios';
 import { BACKEND_CONFIG } from '../config/backendConfig';
 import SimpleServices from './SimpleServices';
 import QRCodeScanner from './QRCodeScanner';
-import Gallery from './ServiceLocationGallery';
 import LocationMap from './LocationMap';
 import './SimpleHeroSection.css';
 
@@ -178,7 +177,6 @@ const BackendHomePageWithDesign = () => {
       {/* Original Homepage Components */}
       <SimpleServices />
       <QRCodeScanner />
-      <Gallery />
       <LocationMap />
 
       {/* Backend Status Footer */}
