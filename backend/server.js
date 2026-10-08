@@ -10,6 +10,7 @@ const path = require('path');
 const User = require('./models/User');
 const Service = require('./models/Service');
 const Booking = require('./models/Booking');
+const JobApplication = require('./models/JobApplication');
 
 // Load environment variables
 dotenv.config();
@@ -296,6 +297,69 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
+// Update user profile endpoint
+app.put('/api/users/profile', async (req, res) => {
+  try {
+    const { firstName, lastName, phone, address, city, region } = req.body;
+    const token = req.headers.authorization?.replace('Bearer ', '');
+
+    console.log('Profile update request:', { firstName, lastName, phone, address, city, region });
+
+    // Get user email from token (in production, decode JWT properly)
+    // For now, use the email from localStorage if available
+    const userData = JSON.parse(req.headers['x-user-data'] || '{}');
+    const email = userData.email;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          message: 'User email required',
+          code: 'MISSING_EMAIL'
+        }
+      });
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { email },
+      {
+        firstName,
+        lastName,
+        phone,
+        address,
+        city,
+        region
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          message: 'User not found',
+          code: 'USER_NOT_FOUND'
+        }
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: { user: updatedUser }
+    });
+  } catch (error) {
+    console.error('Update user error:', error);
+    res.status(500).json({
+      success: false,
+      error: {
+        message: 'Failed to update profile',
+        code: 'UPDATE_PROFILE_ERROR'
+      }
+    });
+  }
+});
+
 // Update user endpoint
 app.put('/api/users/:id', async (req, res) => {
   try {
@@ -363,71 +427,6 @@ app.delete('/api/users/:id', async (req, res) => {
       error: {
         message: 'Failed to delete user',
         code: 'DELETE_USER_ERROR'
-      }
-    });
-  }
-});
-
-// Update user profile endpoint
-app.put('/api/users/profile', async (req, res) => {
-  try {
-    const { firstName, lastName, phone, address, city, region } = req.body;
-    const token = req.headers.authorization?.replace('Bearer ', '');
-
-    console.log('Profile update request:', { firstName, lastName, phone, address, city, region });
-
-    // Get user email from token (in production, decode JWT properly)
-    // For now, use the email from localStorage if available
-    const userData = JSON.parse(req.headers['x-user-data'] || '{}');
-    const email = userData.email;
-
-    if (!email) {
-      return res.status(400).json({
-        success: false,
-        error: {
-          message: 'User email required',
-          code: 'MISSING_EMAIL'
-        }
-      });
-    }
-
-    const updatedUser = await User.findOneAndUpdate(
-      { email },
-      {
-        firstName,
-        lastName,
-        phone,
-        address,
-        city,
-        region
-      },
-      { new: true }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).json({
-        success: false,
-        error: {
-          message: 'User not found',
-          code: 'USER_NOT_FOUND'
-        }
-      });
-    }
-
-    console.log('Profile updated successfully:', updatedUser);
-
-    res.json({
-      success: true,
-      message: 'Profile updated successfully',
-      data: { user: updatedUser }
-    });
-  } catch (error) {
-    console.error('Update profile error:', error);
-    res.status(500).json({
-      success: false,
-      error: {
-        message: 'Failed to update profile: ' + error.message,
-        code: 'UPDATE_PROFILE_ERROR'
       }
     });
   }
@@ -640,6 +639,98 @@ app.post('/api/contact', async (req, res) => {
       error: {
         message: 'Failed to send message',
         code: 'CONTACT_ERROR'
+      }
+    });
+  }
+});
+
+// Job application endpoint
+app.post('/api/job-applications', async (req, res) => {
+  try {
+    console.log('Job application received:', req.body);
+    
+    const application = new JobApplication(req.body);
+    await application.save();
+    
+    console.log('Job application saved successfully:', application);
+
+    res.json({
+      success: true,
+      message: 'Application submitted successfully'
+    });
+  } catch (error) {
+    console.error('Job application error:', error);
+    res.status(500).json({
+      success: false,
+      error: {
+        message: 'Failed to submit application',
+        code: 'APPLICATION_ERROR'
+      }
+    });
+  }
+});
+
+// Get all job applications (admin only)
+app.get('/api/job-applications', async (req, res) => {
+  try {
+    const applications = await JobApplication.find().sort({ submittedAt: -1 });
+    res.json({
+      success: true,
+      data: { applications }
+    });
+  } catch (error) {
+    console.error('Fetch job applications error:', error);
+    res.status(500).json({
+      success: false,
+      error: {
+        message: 'Failed to fetch applications',
+        code: 'FETCH_APPLICATIONS_ERROR'
+      }
+    });
+  }
+});
+
+// Respond to job application (accept/reject)
+app.put('/api/job-applications/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, adminResponse, adminName } = req.body;
+
+    const updatedApplication = await JobApplication.findByIdAndUpdate(
+      id,
+      {
+        status,
+        adminResponse,
+        adminName,
+        respondedAt: new Date()
+      },
+      { new: true }
+    );
+
+    if (!updatedApplication) {
+      return res.status(404).json({
+        success: false,
+        error: {
+          message: 'Application not found',
+          code: 'APPLICATION_NOT_FOUND'
+        }
+      });
+    }
+
+    console.log('Application updated:', updatedApplication);
+
+    res.json({
+      success: true,
+      message: `Application ${status} successfully`,
+      data: { application: updatedApplication }
+    });
+  } catch (error) {
+    console.error('Update application error:', error);
+    res.status(500).json({
+      success: false,
+      error: {
+        message: 'Failed to update application',
+        code: 'UPDATE_APPLICATION_ERROR'
       }
     });
   }

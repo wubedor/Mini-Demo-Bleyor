@@ -18,6 +18,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,6 +54,12 @@ export default function ProfilePage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+    setError('');
+    setSuccess('');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -76,6 +83,7 @@ export default function ProfilePage() {
         localStorage.setItem('userData', JSON.stringify({ ...parsedUserData, ...formData }));
         
         setSuccess('Profile updated successfully!');
+        setIsEditing(false);
       }
     } catch (err) {
       console.error('Profile update error:', err);
@@ -105,41 +113,145 @@ export default function ProfilePage() {
   };
 
   if (loading) {
-    return <div className="profile-container"><LoadingSpinner /></div>;
+    return <div className="profile-page"><LoadingSpinner /></div>;
   }
 
   return (
-    <div className="profile-container">
-      <div className="profile-card">
-        <h2>Your Profile</h2>
-        {error && <div className="profile-error">{error}</div>}
-        {success && <div className="profile-success">{success}</div>}
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="firstName">First Name</label>
-          <input id="firstName" type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
-          
-          <label htmlFor="lastName">Last Name</label>
-          <input id="lastName" type="text" name="lastName" value={formData.lastName} onChange={handleChange} />
-          
-          <label htmlFor="phone">Phone Number</label>
-          <input id="phone" type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
-          
-          <label htmlFor="address">Address</label>
-          <input id="address" type="text" name="address" value={formData.address} onChange={handleChange} required />
-          
-          <label htmlFor="city">City</label>
-          <input id="city" type="text" name="city" value={formData.city} onChange={handleChange} />
-          
-          <label htmlFor="region">Region</label>
-          <input id="region" type="text" name="region" value={formData.region} onChange={handleChange} />
-          
-          <button type="submit" className="profile-button" disabled={loading}>
-            {loading ? 'Updating...' : 'Update Profile'}
-          </button>
-        </form>
-        <button onClick={handleDeleteAccount} className="profile-delete-button" disabled={loading}>
-          Delete Account
-        </button>
+    <div className="profile-page">
+      <div className="profile-container">
+        <div className="profile-header">
+          <h1>My Profile</h1>
+          <div className="action-buttons">
+            <button 
+              onClick={handleEditToggle} 
+              className={isEditing ? 'cancel-btn' : 'edit-btn'}
+            >
+              {isEditing ? 'Cancel' : 'Update Profile'}
+            </button>
+            <button onClick={handleDeleteAccount} className="delete-btn">
+              Delete Account
+            </button>
+          </div>
+        </div>
+
+        {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
+
+        {isEditing ? (
+          <form onSubmit={handleSubmit} className="profile-form">
+            <div className="form-section">
+              <h2>Personal Information</h2>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>First Name</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Last Name</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Phone Number</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Address</label>
+                <input
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>City</label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Region</label>
+                  <input
+                    type="text"
+                    name="region"
+                    value={formData.region}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <button type="submit" className="save-btn" disabled={loading}>
+                {loading ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="profile-view">
+            <div className="profile-avatar">
+              <div className="avatar-placeholder">
+                {formData.firstName ? formData.firstName.charAt(0).toUpperCase() : 'U'}
+              </div>
+            </div>
+
+            <div className="profile-info">
+              <div className="info-section">
+                <h2>Personal Information</h2>
+                <div className="info-grid">
+                  <div className="info-item">
+                    <label>Full Name</label>
+                    <p>{formData.firstName} {formData.lastName}</p>
+                  </div>
+                  <div className="info-item">
+                    <label>Phone</label>
+                    <p>{formData.phone || 'Not provided'}</p>
+                  </div>
+                  <div className="info-item">
+                    <label>Address</label>
+                    <p>{formData.address || 'Not provided'}</p>
+                  </div>
+                  <div className="info-item">
+                    <label>City</label>
+                    <p>{formData.city || 'Not provided'}</p>
+                  </div>
+                  <div className="info-item">
+                    <label>Region</label>
+                    <p>{formData.region || 'Not provided'}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="edit-hint">
+                <p>💡 Click "Update Profile" to edit your information</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

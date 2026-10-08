@@ -30,6 +30,8 @@ import AccountDashboard from './components/AccountDashboard';
 import BookingPage from './components/BookingPage';
 import AdminDashboard from './components/AdminDashboard';
 import EmployeePage from './components/EmployeePage';
+import JobApplicationsPage from './components/JobApplicationsPage';
+import MyJobApplications from './components/MyJobApplications';
 import QRCodePage from './components/QRCodePage';
 import PasswordReset from './components/PasswordReset';
 import PhoneAuth from './components/PhoneAuth';
@@ -220,7 +222,9 @@ export default function App() {
                     <Route path="/firebase-test" element={<FirebaseTest />} />
                     <Route path="/account-dashboard" element={<ProtectedRoute><AccountDashboard /></ProtectedRoute>} />
                     <Route path="/admin-dashboard" element={<BackendAdminRoute><AdminDashboard /></BackendAdminRoute>} />
-                    <Route path="/employees" element={<BackendAdminRoute><EmployeePage /></BackendAdminRoute>} />
+                    <Route path="/job-applications" element={<BackendAdminRoute><JobApplicationsPage /></BackendAdminRoute>} />
+                    <Route path="/my-applications" element={<ProtectedRoute><MyJobApplications /></ProtectedRoute>} />
+                    <Route path="/employees" element={<ProtectedRoute><EmployeePage /></ProtectedRoute>} />
                     <Route path="/admin/*" element={<BackendAdminRoute><AdminRoutes /></BackendAdminRoute>} />
                     <Route path="/user-data-protection" element={<ProtectedRoute><UserDataProtection /></ProtectedRoute>} />
                     <Route path="/firebase-status" element={<FirebaseStatus />} />

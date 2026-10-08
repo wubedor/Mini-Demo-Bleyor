@@ -54,14 +54,18 @@ export default function Header() {
             <li><NavLink to="/services" onClick={handleLinkClick}>Services</NavLink></li>
             <li><NavLink to="/about" onClick={handleLinkClick}>About</NavLink></li>
             <li><NavLink to="/contact" onClick={handleLinkClick}>Contact</NavLink></li>
-            <li><NavLink to="/app" onClick={handleLinkClick}>📱 Get App</NavLink></li>
             {user ? (
               <>
                 <li><NavLink to="/my-bookings" onClick={handleLinkClick}>My Bookings</NavLink></li>
+                <li><NavLink to="/my-applications" onClick={handleLinkClick}>My Applications</NavLink></li>
                 <li><NavLink to="/profile" onClick={handleLinkClick}>Profile</NavLink></li>
                 {(user.role === 'admin' || user.role === 'super_admin') && (
-                  <li><NavLink to="/employees" onClick={handleLinkClick}>Employees</NavLink></li>
+                  <>
+                    <li><NavLink to="/job-applications" onClick={handleLinkClick}>Job Applications</NavLink></li>
+                    <li><NavLink to="/admin-dashboard" onClick={handleLinkClick}>Admin Dashboard</NavLink></li>
+                  </>
                 )}
+                <li><NavLink to="/employees" onClick={handleLinkClick}>Careers</NavLink></li>
                 <li><button onClick={handleLogout} className="logout-button">Logout</button></li>
               </>
             ) : (
